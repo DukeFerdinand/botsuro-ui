@@ -85,4 +85,4 @@ jobs:
         uses: steebchen/kubectl@v2.0.0
         with:
           config: ${{ secrets.KUBE_CONFIG }}
-          command: rollout status deployment/botsuro-ui-deployment
+          command: rollout status -n botsuro deployment botsuro-ui-deployment
