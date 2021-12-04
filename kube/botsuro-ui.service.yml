@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: botsuro
+  name: botsuro-ui-deployment
+  labels:
+    app: botsuro-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: botsuro-ui
+  template:
+    metadata:
+      labels:
+        app: botsuro-ui
+    spec:
+      containers:
+        - name: botsuro-ui
+          image: registry.dougflynn.dev/botsuro-ui:latest
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: botsuro-service
+  namespace: botsuro
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+  selector:
+    app: botsuro-ui

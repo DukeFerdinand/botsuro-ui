@@ -1,0 +1,20 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: botsuro
+  namespace: botsuro
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+
+spec:
+  rules:
+    - host: botsuro.seaside.fm
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: botsuro-service
+                port:
+                  number: 80
