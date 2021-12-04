@@ -65,7 +65,7 @@ jobs:
           config: .github/buildkitd.toml
 
       - name: Create and Push Manifest(s)
-        run: make build
+        run: make build-arm
 
   deploy:
     name: Restart Kubernetes Deployment
