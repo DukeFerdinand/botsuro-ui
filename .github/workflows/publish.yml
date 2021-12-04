@@ -54,7 +54,14 @@ jobs:
         with:
           config: .github/buildkitd.toml
 
-      - name: Available platforms
-        run: echo ${{ steps.buildx.outputs.platforms }}
+      - name: Create and Push Manifest(s)
+        run: make build
+
+#      - name: Trigger Kubernetes Deployment
+#        uses: Consensys/kubernetes-action@master
+#        env:
+#          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+#        with:
+#          args: apply kube/
 
 
