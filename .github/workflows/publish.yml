@@ -62,7 +62,7 @@ jobs:
 
   deploy:
     name: Restart Kubernetes Deployment
-    needs: build-publish
+    needs: publish
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
