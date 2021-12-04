@@ -75,6 +75,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Wait for Docker Manifests to Populate
+        run: echo "Allowing time for manifests..." && sleep 30s
+        shell: bash
+
       - name: Deploy to Cluster
         uses: steebchen/kubectl@v2.0.0
         with:
