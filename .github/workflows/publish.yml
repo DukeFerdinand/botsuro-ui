@@ -5,6 +5,7 @@ on:
 
 jobs:
   check:
+    name: Check Code For Issues
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,7 +33,9 @@ jobs:
       - name: Run linter
         run: pnpm lint
 
-  build-publish:
+  publish:
+    name: Create Latest Images
+    needs: check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,11 +60,22 @@ jobs:
       - name: Create and Push Manifest(s)
         run: make build
 
-#      - name: Trigger Kubernetes Deployment
-#        uses: Consensys/kubernetes-action@master
-#        env:
-#          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-#        with:
-#          args: apply kube/
+  deploy:
+    name: Restart Kubernetes Deployment
+    needs: build-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
+      - name: Deploy to Cluster
+        uses: steebchen/kubectl@v2.0.0
+        with:
+          config: ${{ secrets.KUBE_CONFIG }}
+          command: rollout restart deployment -n botsuro botsuro-ui-deployment
 
+      - name: Verify Deployment
+        uses: steebchen/kubectl@v2.0.0
+        with:
+          config: ${{ secrets.KUBE_CONFIG }}
+          command: rollout status deployment/botsuro-ui-deployment
