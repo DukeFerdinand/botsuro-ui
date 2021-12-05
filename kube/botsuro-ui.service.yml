@@ -19,6 +19,12 @@ spec:
         - name: botsuro-ui
           image: registry.dougflynn.dev/botsuro-ui:latest
           imagePullPolicy: Always
+          env:
+            - name: MONGO_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: mongourl
+                  key: url
       imagePullSecrets:
         - name: regcred
 ---
