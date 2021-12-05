@@ -42,7 +42,6 @@ export const SongRequests: React.FC = () => {
     ];
 
     const genRows = () => {
-        console.log(data);
         return data ? data.map((r) => ({ ...r, id: r._id })).reverse() : [];
     };
 
@@ -80,11 +79,9 @@ export const SongRequests: React.FC = () => {
                         rows={rows}
                         loading={isLoading}
                         onCellEditCommit={async (p) => {
-                            console.log(p);
                             const field = p.field;
                             // @ts-ignore
                             const newRow = { ...p.row, [field]: p.value };
-                            console.log(newRow);
                             delete newRow.id;
 
                             await rqService.updateRequest(newRow);
