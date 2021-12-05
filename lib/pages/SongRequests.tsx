@@ -3,13 +3,18 @@ import { useQuery } from "react-query";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 import { Box, Container, Typography } from "@mui/material";
 
-import { RequestsService } from "@/global-services/requests";
+import { RequestsService, SongRequest } from "@/global-services/requests";
 import { SidebarLayout } from "./layouts/SidebarLayout";
 
 export const SongRequests: React.FC = () => {
     const rqService = new RequestsService();
 
-    const { isLoading, data, error } = useQuery(["requests"], async () => {
+    const {
+        isLoading,
+        data,
+        error,
+        refetch: refetchRequests,
+    } = useQuery(["requests"], async () => {
         return await rqService.getRequests();
     });
 
@@ -39,10 +44,32 @@ export const SongRequests: React.FC = () => {
             type: "boolean",
             editable: true,
         },
+        {
+            field: "stream_date",
+            type: "date",
+            editable: true,
+            width: 150,
+        },
+        {
+            field: "notes",
+            type: "string",
+            editable: true,
+            width: 350,
+        },
     ];
 
     const genRows = () => {
-        return data ? data.map((r) => ({ ...r, id: r._id })).reverse() : [];
+        return data
+            ? data
+                  .map((r) => ({
+                      ...r,
+                      id: r._id,
+                      stream_date: r.stream_date
+                          ? new Date(r.stream_date)
+                          : undefined,
+                  }))
+                  .reverse()
+            : [];
     };
 
     const rows = useMemo(genRows, [data]);
@@ -50,6 +77,7 @@ export const SongRequests: React.FC = () => {
     return (
         <SidebarLayout>
             <Container
+                maxWidth={"xl"}
                 component={"main"}
                 sx={{
                     height: "100%",
@@ -80,11 +108,23 @@ export const SongRequests: React.FC = () => {
                         loading={isLoading}
                         onCellEditCommit={async (p) => {
                             const field = p.field;
-                            // @ts-ignore
-                            const newRow = { ...p.row, [field]: p.value };
-                            delete newRow.id;
 
-                            await rqService.updateRequest(newRow);
+                            const row = rows.findIndex((r) => r.id === p.id);
+
+                            if (!row) {
+                                console.warn(`[warn] Cannot find row ${p.id}`);
+                            } else {
+                                const newRow: Partial<SongRequest> = {
+                                    _id: p.id as string,
+                                    [field]:
+                                        p.value instanceof Date
+                                            ? p.value.getTime()
+                                            : p.value,
+                                };
+
+                                await rqService.updateRequest(newRow);
+                                await refetchRequests();
+                            }
                         }}
                     />
                 </Box>

@@ -5,6 +5,6 @@ export async function middleware(
     req: NextRequest,
     _ev: NextFetchEvent
 ): Promise<NextResponse> {
-    console.log(req.headers);
+    console.log(req.cookies, req.headers);
     return NextResponse.next();
 }

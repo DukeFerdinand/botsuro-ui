@@ -43,6 +43,7 @@ declare module "@mui/material/Typography" {
 // --white: #ffffffff;
 
 const paletteThemePartial: PaletteOptions = {
+    mode: "dark",
     primary: {
         main: "#212227",
     },

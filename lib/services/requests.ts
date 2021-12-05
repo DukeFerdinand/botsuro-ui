@@ -23,11 +23,11 @@ export class RequestsService {
         return res.data;
     }
 
-    async updateRequest(newData: SongRequest): Promise<boolean> {
+    async updateRequest(newData: Partial<SongRequest>): Promise<boolean> {
         const res: RequestsResponse<boolean> = await fetch(
             "/api/updateRequest",
             {
-                method: "POST",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
