@@ -7,29 +7,40 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import { createGlobalThemeObject } from "@/themes/global";
 import { createEmotionCache } from "@/themes/createEmotionCache";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 interface BotsuroUIAppProps extends AppProps {
-  emotionCache?: EmotionCache;
+    emotionCache?: EmotionCache;
 }
 
 const globalThemeObject = createGlobalThemeObject();
 const clientSideEmotionCache = createEmotionCache();
 
 function BotsuroUIApp(props: BotsuroUIAppProps) {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  return (
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <title>Botsuro Management UI</title>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </Head>
+    const {
+        Component,
+        emotionCache = clientSideEmotionCache,
+        pageProps,
+    } = props;
+    const queryClient = new QueryClient();
+    return (
+        <CacheProvider value={emotionCache}>
+            <Head>
+                <title>Botsuro Management UI</title>
+                <meta
+                    name="viewport"
+                    content="initial-scale=1, width=device-width"
+                />
+            </Head>
 
-      <ThemeProvider theme={globalThemeObject}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </CacheProvider>
-  );
+            <ThemeProvider theme={globalThemeObject}>
+                <CssBaseline />
+                <QueryClientProvider client={queryClient}>
+                    <Component {...pageProps} />
+                </QueryClientProvider>
+            </ThemeProvider>
+        </CacheProvider>
+    );
 }
 
 export default BotsuroUIApp;
