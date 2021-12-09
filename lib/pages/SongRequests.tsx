@@ -20,37 +20,50 @@ export const SongRequests: React.FC = () => {
 
     const columns: GridColumns = [
         {
+            headerName: "Requested By",
             field: "user",
             type: "string",
             width: 150,
         },
         {
+            headerName: "Artist",
             field: "artist",
             type: "string",
             width: 250,
         },
         {
+            headerName: "Song Title",
             field: "song_title",
             type: "string",
             width: 250,
         },
         {
+            headerName: "Ripped",
             field: "ripped",
             type: "boolean",
             editable: true,
         },
         {
+            headerName: "Streamed",
             field: "streamed",
             type: "boolean",
             editable: true,
         },
         {
+            headerName: "Streamed On",
             field: "stream_date",
             type: "date",
             editable: true,
             width: 150,
         },
         {
+            headerName: "Owned",
+            field: "owned",
+            type: "boolean",
+            editable: true,
+        },
+        {
+            headerName: "Notes",
             field: "notes",
             type: "string",
             editable: true,
@@ -111,7 +124,7 @@ export const SongRequests: React.FC = () => {
 
                             const row = rows.findIndex((r) => r.id === p.id);
 
-                            if (!row) {
+                            if (row < 0) {
                                 console.warn(`[warn] Cannot find row ${p.id}`);
                             } else {
                                 const newRow: Partial<SongRequest> = {
