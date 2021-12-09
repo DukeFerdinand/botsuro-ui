@@ -56,10 +56,17 @@ export const SongRequests: React.FC = () => {
             editable: true,
             width: 150,
         },
+        // {
+        //     headerName: "Owned",
+        //     field: "owned",
+        //     type: "boolean",
+        //     editable: true,
+        // },
         {
-            headerName: "Owned",
-            field: "owned",
-            type: "boolean",
+            headerName: "Status",
+            field: "status",
+            type: "singleSelect",
+            valueOptions: ["Own", "To Buy", "Will not buy"],
             editable: true,
         },
         {
