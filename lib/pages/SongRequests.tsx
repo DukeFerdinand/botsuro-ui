@@ -66,7 +66,16 @@ export const SongRequests: React.FC = () => {
             headerName: "Status",
             field: "status",
             type: "singleSelect",
-            valueOptions: ["Own", "To Buy", "Will not buy"],
+            valueOptions: [
+                "Own",
+                "Do Not Own",
+                "On the Way",
+                "Stuck in Transit",
+                "Out For Delivery",
+                "IDK ????",
+                "To Buy",
+                "Will not buy",
+            ],
             editable: true,
         },
         {
