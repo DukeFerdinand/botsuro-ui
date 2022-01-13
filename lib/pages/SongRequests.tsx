@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 
 import { RequestsService, SongRequest } from "@/global-services/requests";
 import { SidebarLayout } from "./layouts/SidebarLayout";
@@ -92,7 +93,8 @@ export const SongRequests: React.FC = () => {
             getActions: (params) => {
                 console.log(params.id);
                 return [
-                    <Button
+                    <LoadingButton
+                        loading={manualLoading}
                         color={"error"}
                         variant={"outlined"}
                         key={"delete"}
@@ -104,7 +106,7 @@ export const SongRequests: React.FC = () => {
                         }}
                     >
                         Delete
-                    </Button>,
+                    </LoadingButton>,
                 ];
             },
             type: "actions",
