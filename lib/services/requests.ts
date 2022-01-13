@@ -41,4 +41,23 @@ export class RequestsService {
 
         return res.data;
     }
+
+    async deleteRequest(id: SongRequest["_id"]): Promise<boolean> {
+        const res: RequestsResponse<boolean> = await fetch(
+            "/api/deleteRequest",
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id }),
+            }
+        ).then((res) => res.json());
+
+        if (res.error) {
+            throw new Error(res.error);
+        }
+
+        return res.data;
+    }
 }

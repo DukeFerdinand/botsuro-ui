@@ -1,13 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 
 import { RequestsService, SongRequest } from "@/global-services/requests";
 import { SidebarLayout } from "./layouts/SidebarLayout";
 
 export const SongRequests: React.FC = () => {
     const rqService = new RequestsService();
+    const [manualLoading, setLoading] = useState(false);
 
     const {
         isLoading,
@@ -85,6 +86,31 @@ export const SongRequests: React.FC = () => {
             editable: true,
             width: 350,
         },
+        {
+            headerName: "Actions",
+            field: "actions",
+            getActions: (params) => {
+                console.log(params.id);
+                return [
+                    <Button
+                        color={"error"}
+                        variant={"outlined"}
+                        key={"delete"}
+                        onClick={async () => {
+                            setLoading(true);
+                            await rqService.deleteRequest(params.id as string);
+                            await refetchRequests();
+                            setLoading(false);
+                        }}
+                    >
+                        Delete
+                    </Button>,
+                ];
+            },
+            type: "actions",
+            editable: true,
+            width: 150,
+        },
     ];
 
     const genRows = () => {
@@ -134,7 +160,7 @@ export const SongRequests: React.FC = () => {
                     <DataGrid
                         columns={columns}
                         rows={rows}
-                        loading={isLoading}
+                        loading={manualLoading || isLoading}
                         onCellEditCommit={async (p) => {
                             const field = p.field;
 
